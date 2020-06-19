@@ -5,7 +5,7 @@ set project_name "monitorizer"
 create_project $project_name $project_dir/$project_name -part xczu19eg-ffvc1760-2-i
 
 #add src file
-add_files -norecurse $project_dir/../../src/monitorizer/monitorizer.v
+import_files -norecurse $project_dir/../../src/monitorizer/monitorizer.v
 update_compile_order -fileset sources_1
 
 #package ip
