@@ -7,14 +7,14 @@ struct gulf_axis {
 	ap_uint<16> dest;
 	ap_uint<1> last;
 	ap_uint<32> user; //hold the remote ip, feed into remote_ip_tx
+	ap_uint<16> id;
 };
 
 
 void ptp_master (
 			ap_uint <64> current_time,
 			hls::stream <gulf_axis> &packet_out,
-			hls::stream <gulf_axis> packet_in,
-			ap_uint <16> remote_port_tx
+			hls::stream <gulf_axis> packet_in
 		) {
 
 #pragma HLS INTERFACE ap_ctrl_none port=return
@@ -31,7 +31,7 @@ void ptp_master (
 		if (packet_local.data == 1) {
 			packet_local.data.range(63,0) = current_time;
 			packet_local.data.range(511,64) = 0;
-			packet_local.dest = remote_port_tx;
+			packet_local.dest = packet_local.id;
 			packet_local.keep = 0xFFFFFFFFFFFFFFFF;
 			packet_local.last = 1;
 			if (!packet_out.full())
@@ -41,4 +41,5 @@ void ptp_master (
 		}
 	}
 }
+
 

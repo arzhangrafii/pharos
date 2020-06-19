@@ -10,6 +10,7 @@ struct gulf_axis {
 	ap_uint<16> dest;
 	ap_uint<1> last;
 	ap_uint<32> user;
+	ap_uint<16> id;
 };
 
 struct kernel_axis {
@@ -23,12 +24,9 @@ void packet_parser (
 		hls::stream <gulf_axis> &out_stream,
 		hls::stream <gulf_axis> &in_stream,
 		hls::stream <kernel_axis> &output,
-		ap_uint <32> read_out_period,
+		ap_uint <32> read_frequency,
 		ap_uint <64> time,
 		ap_uint <64> &latency_raw,
-		ap_uint <64> &time_sent, //the time being read here, for debug purposes
-		ap_uint <1> &write_latency_out,
-		ap_uint <32> &counter_out,
 		ap_uint <1> measure,
 		ap_uint <32> remote_ip_tx,
 		ap_uint <16> remote_port_tx
@@ -42,9 +40,6 @@ void packet_parser (
 #pragma HLS resource core=AXI4Stream variable=in_stream
 #pragma HLS DATA_PACK variable=in_stream
 #pragma HLS INTERFACE ap_none port=latency_raw
-#pragma HLS INTERFACE ap_none port=write_latency_out
-#pragma HLS INTERFACE ap_none port=counter_out
-#pragma HLS INTERFACE ap_none port=time_sent
 
 
 	gulf_axis flit_temp;
@@ -57,8 +52,6 @@ void packet_parser (
 	static ap_uint <32> latency_ub;
 	static ap_uint <32> latency_lb;
 
-	counter_out = counter;
-
 	static enum {LATENCY, TIME} state = LATENCY;
 
 	latency_temp.keep = 0xFF;
@@ -66,8 +59,7 @@ void packet_parser (
 	switch (state) {
 	case LATENCY:
 		if (measure == 1) {
-			if (counter == read_out_period) {
-				write_latency_out = 1;
+			if (counter == read_frequency) {
 				latency_temp.data = latency;
 				latency_temp.user = remote_ip_rx;
 				if (!output.full())
@@ -77,12 +69,10 @@ void packet_parser (
 			}
 			else {
 				counter++;
-				write_latency_out = 0;
 			}
 		}
 		else {
 			counter = 0;
-			write_latency_out = 0;
 		}
 		break;
 	case TIME:
@@ -95,7 +85,6 @@ void packet_parser (
 	}
 
 	latency_raw = latency;
-	time_sent = packet_time_sent;
 	if (!in_stream.empty()) { //if latency is not valid, drop the packet
 		flit_temp = in_stream.read();
 		packet_time_sent = flit_temp.data.range(495,432);
