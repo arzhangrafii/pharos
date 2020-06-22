@@ -53,16 +53,19 @@ set_property name aresetn [get_bd_pins packet_snooper_$id/aresetn_0]
 connect_bd_net [get_bd_pins packet_snooper_$id/aresetn] [get_bd_pins packet_snooper_$id/packet_size_EMA_0/aresetn]
 
 #make axi-s outputs external
-make_bd_intf_pins_external  [get_bd_intf_pins packet_snooper_$id/packet_counter/number_of_flits_V] [get_bd_intf_pins packet_snooper_$id/packet_counter/cycle_count_V] [get_bd_intf_pins packet_snooper_$id/packet_size_EMA_0/packet_size_average_V]
+make_bd_intf_pins_external  [get_bd_intf_pins packet_snooper_$id/packet_counter/number_of_flits_V] [get_bd_intf_pins packet_snooper_$id/packet_counter/cycle_count_V] [get_bd_intf_pins packet_snooper_$id/packet_size_EMA_0/packet_size_average_V] [get_bd_intf_pins packet_snooper_$id/monitorizer_0/mon]
 delete_bd_objs [get_bd_intf_nets packet_snooper_$id\_cycle_count_V_0] [get_bd_intf_nets packet_snooper_$id\_number_of_flits_V_0] [get_bd_intf_nets packet_snooper_$id\_packet_size_average_V_0] [get_bd_intf_ports cycle_count_V_0] [get_bd_intf_ports number_of_flits_V_0] [get_bd_intf_ports packet_size_average_V_0]
+delete_bd_objs [get_bd_intf_nets Conn] [get_bd_intf_ports mon_0]
 set_property name number_of_flits [get_bd_intf_pins packet_snooper_$id/number_of_flits_V_0]
 set_property name cycle_count [get_bd_intf_pins packet_snooper_$id/cycle_count_V_0]
 set_property name packet_size_average [get_bd_intf_pins packet_snooper_$id/packet_size_average_V_0]
+set_property name snooper_in_stream [get_bd_intf_pins packet_snooper_$id/mon_0]
 
 #connect the selected pin to this core
 puts [string compare [get_bd_intf_pins [get_selected_objects]] ""]
 if {[string compare [get_bd_intf_pins [get_selected_objects]] ""] != 0} {
-	connect_bd_intf_net [get_bd_intf_pins packet_snooper_$id/monitorizer_0/mon] [get_bd_intf_pins [get_selected_objects ]]
+	connect_bd_intf_net [get_bd_intf_pins packet_snooper_$id/snooper_in_stream] [get_bd_intf_pins [get_selected_objects ]]
+	puts 
 }
 
 
