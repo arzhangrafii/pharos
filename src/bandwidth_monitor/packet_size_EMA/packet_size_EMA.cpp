@@ -22,8 +22,8 @@ void packet_size_EMA (
 #pragma HLS INTERFACE ap_none port=packet_size_valid
 #pragma HLS INTERFACE ap_none port=Beta
 
-	static ap_f bandwidth_old = 0;
-	static ap_f bandwidth;
+	static ap_f EMA_old = 0;
+	static ap_f EMA;
 	static ap_uint <64> counter = 0;
 	ap_f dummy;
 
@@ -32,22 +32,22 @@ void packet_size_EMA (
 	//the following line do absolutely nothing.
 	//but without them the latency goes from 0 to 1
 	//very strange
-	dummy = bandwidth;
+	dummy = EMA;
 
 	if (packet_size_valid) {
-		bandwidth = (ap_f(1.0)-ap_f(Beta))*(bandwidth_old) + ap_f(Beta)*(ap_f(packet_size));
-		bandwidth_old = bandwidth;
-	}
+		EMA = (ap_f(1.0)-ap_f(Beta))*(EMA_old) + ap_f(Beta)*(ap_f(packet_size));
+		EMA_old = EMA;
 
-	//output the bandwidth value
-	if (counter == read_frequency) {
-		output_temp.data = bandwidth;
-		output_temp.last = 1;
-		output_temp.keep = 0xFF;
-		if (!packet_size_average.full())
-			packet_size_average.write(output_temp);
-		counter = 0;
+		//output the EMA value
+		if (counter == read_frequency) {
+			output_temp.data = EMA;
+			output_temp.last = 1;
+			output_temp.keep = 0xFF;
+			if (!packet_size_average.full())
+				packet_size_average.write(output_temp);
+			counter = 0;
+		}
+		else
+			counter++;
 	}
-	else
-		counter++;
 }
