@@ -1,3 +1,5 @@
+all: pharos_IPCore bandwidth_monitor_example
+
 pharos_IPCore:
 	$(MAKE) -C ip_repo/hls_ips
 	$(MAKE) -C ip_repo/vivado_ips
