@@ -10,14 +10,14 @@ performance monitoring instrumentation for multi-FPGA systems
 
 ## Make
 
-*To make pharos ip repository
+* To make pharos ip repository
 
-> make pharos_IPCore
+	* make pharos_IPCore
 
-*To make bandwidth monitor example
+* To make bandwidth monitor example
 
-> make bandwidth_monitor_example
+	* make bandwidth_monitor_example
 
-*To make the ip repository and example projects
+* To make the ip repository and example projects
 
-> make all
+	* make all
