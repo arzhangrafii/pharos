@@ -8,6 +8,7 @@ typedef ap_ufixed<32,16> ap_f;
 typedef ap_ufixed<8,1> ap_fs;
 
 void packet_size_EMA (
+		ap_uint <1> measure,
 		ap_fs Beta,
 		ap_uint <64> packet_size,
 		ap_uint <1> packet_size_valid,
@@ -34,10 +35,11 @@ void packet_size_EMA (
 	//very strange
 	dummy = EMA;
 
-	if (packet_size_valid) {
-		EMA = (ap_f(1.0)-ap_f(Beta))*(EMA_old) + ap_f(Beta)*(ap_f(packet_size));
-		EMA_old = EMA;
-
+	if (measure == 1) {
+		if (packet_size_valid) {
+			EMA = (ap_f(1.0)-ap_f(Beta))*(EMA_old) + ap_f(Beta)*(ap_f(packet_size));
+			EMA_old = EMA;
+		}
 		//output the EMA value
 		if (counter == read_frequency) {
 			output_temp.data = EMA;
@@ -49,5 +51,11 @@ void packet_size_EMA (
 		}
 		else
 			counter++;
+	}
+
+	else {
+		counter = 0;
+		EMA = 0;
+		EMA_old = 0;
 	}
 }

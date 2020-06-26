@@ -15,6 +15,7 @@ connect_bd_intf_net [get_bd_intf_pins monitorizer_0/hls] [get_bd_intf_pins packe
 #connect snooper and EMA
 connect_bd_net [get_bd_pins packet_counter/packet_size_V] [get_bd_pins packet_size_EMA_0/packet_size_V]
 connect_bd_net [get_bd_pins packet_counter/packet_size_valid_V] [get_bd_pins packet_size_EMA_0/packet_size_valid_V]
+connect_bd_net [get_bd_pins packet_counter/measure_out_V] [get_bd_pins packet_size_EMA_0/measure_V]
 connect_bd_net [get_bd_pins packet_size_EMA_0/aclk] [get_bd_pins packet_counter/aclk]
 
 #create a higherarchy for this core

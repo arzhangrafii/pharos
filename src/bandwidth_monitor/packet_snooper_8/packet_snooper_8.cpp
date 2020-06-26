@@ -8,11 +8,12 @@ void packet_snooper_8 (
 		hls::stream <output_axis> &cycle_count,
 		ap_uint <1> measure, //used to start and stop measurements
 		ap_uint <64> &packet_size,
-		ap_uint <1> &packet_size_valid
-		//add Beta variable
+		ap_uint <1> &packet_size_valid,
+		ap_uint <1> &measure_out
 					) {
 #pragma HLS INTERFACE ap_none port=packet_size
 #pragma HLS INTERFACE ap_none port=packet_size_valid
+#pragma HLS INTERFACE ap_none port=measure_out
 #pragma HLS INTERFACE ap_ctrl_none port=return
 #pragma HLS resource core=AXI4Stream variable=in_stream
 #pragma HLS DATA_PACK variable=in_stream
@@ -34,6 +35,7 @@ void packet_snooper_8 (
 
 	packet_size = packet_size_reg;
 	packet_size_valid = packet_size_valid_reg;
+	measure_out = measure;
 
 	//reset values on new measurement
 	if (measure_old == 0 && measure == 1) {
