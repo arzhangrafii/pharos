@@ -22,6 +22,7 @@ set_property core_revision 0 [ipx::current_core]
 ipx::create_xgui_files [ipx::current_core]
 ipx::update_checksums [ipx::current_core]
 ipx::save_core [ipx::current_core]
+set_property ip_repo_paths [list "$root_dir/$parent_ip/$project_name/${project_name}.srcs/sources_1/bd/${project_name}"] [current_project]
 update_ip_catalog
 
 close_project
