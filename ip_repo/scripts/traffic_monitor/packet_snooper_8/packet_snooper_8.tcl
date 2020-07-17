@@ -1,6 +1,6 @@
-set root_dir [file dirname [file dirname [file dirname [file dirname [file dirname [file dirname [file normalize [info script]]]]]]]]
+set root_dir [file dirname [file dirname [file dirname [file dirname [file dirname [file normalize [info script]]]]]]]
 set ip_name "bandwidth_monitor"
-set module_name "packet_snooper_512"
+set module_name "packet_snooper_8"
 cd $ip_name/$module_name
 open_project $module_name
 set_top $module_name

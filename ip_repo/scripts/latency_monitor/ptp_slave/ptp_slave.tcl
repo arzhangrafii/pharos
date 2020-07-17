@@ -1,6 +1,6 @@
-set root_dir [file dirname [file dirname [file dirname [file dirname [file dirname [file dirname [file normalize [info script]]]]]]]]
+set root_dir [file dirname [file dirname [file dirname [file dirname [file dirname [file normalize [info script]]]]]]]
 set ip_name "latency_monitor"
-set module_name "packet_generator"
+set module_name "ptp_slave"
 cd $ip_name/$module_name
 open_project $module_name
 set_top $module_name
