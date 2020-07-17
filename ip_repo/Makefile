@@ -1,13 +1,13 @@
 all: event_logger packet_snooper packet_snooper_8 packet_snooper_512 packet_size_EMA master_timer slave_timer packet_generator packet_parser packet_parser_multi_fanout ptp_master ptp_slave
 
-event_logger: scripts/traffic_monitor/event_logger/* ../../src/traffic_monitor/event_logger/*
+event_logger: scripts/traffic_monitor/event_logger/event_logger.tcl
 	rm -rf event_logger
 	mkdir -p traffic_monitor
 	mkdir -p traffic_monitor/event_logger
 	vivado -mode tcl -source scripts/traffic_monitor/event_logger/event_logger.tcl -nolog -nojournal
 	rm -f vivado_hls.log
 
-packet_snooper: scripts/traffic_monitor/packet_snooper/* ../../src/traffic_monitor/packet_snooper/*
+packet_snooper: scripts/traffic_monitor/packet_snooper/packet_snooper.tcl
 	rm -rf packet_snooper
 	mkdir -p traffic_monitor
 	mkdir -p traffic_monitor/packet_snooper
