@@ -1,7 +1,7 @@
 #include "hls_stream.h"
 #include "ap_int.h"
-#define SYNC_PERIOD 100000
-
+//#define SYNC_PERIOD 100000
+#define TIME_OUT 100000000
 
 struct gulf_axis {
 	ap_uint<512> data;
@@ -26,7 +26,8 @@ void ptp_slave (
 			ap_uint <16> remote_port_tx,
 			ap_uint <16> local_port_tx,
 			ap_uint <64> &sync_req_time_out,
-			ap_uint <64> &network_time_out
+			ap_uint <64> &network_time_out,
+			ap_uint <32> sync_period
 		) {
 
 #pragma HLS INTERFACE ap_ctrl_none port=return
@@ -71,7 +72,7 @@ void ptp_slave (
 		case SYNC_REQ: //request a new time synchronization
 			set_time = 0;
 			if (!packet_out.full()) {
-				if (current_time - last_time >= SYNC_PERIOD) {
+				if (current_time - last_time >= sync_period) {
 					packet_local.dest = remote_port_tx;
 					packet_local.user = remote_ip_tx;
 					packet_local.id = local_port_tx;
@@ -85,7 +86,11 @@ void ptp_slave (
 			}
 			break;
 		case SYNC:
-			if (!packet_in.empty()) {
+			if ((current_time - sync_req_time) >= TIME_OUT) {
+				set_time = 0;
+				state = SYNC_REQ;
+			}
+			else if (!packet_in.empty()) {
 				packet_local = packet_in.read();
 				new_time = packet_local.data.range(63,0);
 				network_time = (current_time - sync_req_time)/2;
