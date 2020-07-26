@@ -105,7 +105,8 @@ void ptp_slave (
 		}
 	}
 	else {
-		state = SYNC_REQ;
+		state = IDLE;
+		last_time = 0;
 		set_time = 0;
 	}
 }
