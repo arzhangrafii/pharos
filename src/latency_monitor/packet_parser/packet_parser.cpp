@@ -87,7 +87,7 @@ void packet_parser (
 	latency_raw = latency;
 	if (!in_stream.empty()) { //if latency is not valid, drop the packet
 		flit_temp = in_stream.read();
-		packet_time_sent = flit_temp.data.range(495,432);
+		packet_time_sent = flit_temp.data.range(63,0);
 		latency = abs(packet_time_sent - time);
 		timestamp = time;
 

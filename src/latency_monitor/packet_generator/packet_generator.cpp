@@ -24,14 +24,13 @@ void packet_generator (
 #pragma HLS resource core=AXI4Stream variable=out_stream //use this instead of INTERFACE (which is buggy)
 #pragma HLS DATA_PACK variable=out_stream //concats the struct into one big block
 
-	static ap_uint <16> cur_count = 0;
+	static ap_uint <32> cur_count = 0;
 	static ap_uint <64> frequency_old; 	//PROBLEM:if during the run of this core, frequency changes to a lower value, there is a possibility of a bug:
 										//it may happen that at the time that frequency is reduced, count is bigger than the new frequency
 										//this will cause count to never reach the new frequency, there there will be no more outputs
 										//SOLUTION: by using the "frequency_old", we track the change in frequency and will reset count everytime frequency changes
 	gulf_axis flit_out;
-	flit_out.data.range(511,496) = cur_count;
-	flit_out.data.range(431,0)= 0;
+	flit_out.data.range(511,64)= 0;
 	flit_out.dest=remote_port_tx;
 	flit_out.last = 1;
 	flit_out.keep = 0xFFFFFFFFFFFFFFFF;
@@ -43,7 +42,7 @@ void packet_generator (
 	}
 	else if (!out_stream.full() && init == 1) {
 		if (cur_count == frequency) {
-			flit_out.data.range(495,432) = time;
+			flit_out.data.range(63,0) = time;
 			out_stream.write(flit_out);
 			cur_count = 0;
 		}

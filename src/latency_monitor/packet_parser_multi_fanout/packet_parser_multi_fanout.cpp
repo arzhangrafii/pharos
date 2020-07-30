@@ -151,7 +151,7 @@ void packet_parser_multi_fanout (
 						connection_index++;
 					}
 
-					packet_time_sent = flit_temp.data.range(495,432);
+					packet_time_sent = flit_temp.data.range(63,0);
 					latency = packet_time_sent - time > 0 ? packet_time_sent - time  : time - packet_time_sent;
 					element_temp.latency = latency;
 					timestamp = time;
