@@ -135,6 +135,14 @@ void packet_parser_multi_fanout (
 					/*********************/
 					flit_temp = in_stream.read();
 
+					if (!out_stream.full()) { //send packets back towards master only when new packets still arrive
+						flit_temp.last = 1;
+						flit_temp.user = remote_ip_tx;
+						flit_temp.dest = flit_temp.id; //send it back to its sender
+						out_stream.write(flit_temp);
+					}
+
+
 					//capture the sender's ip address (the ip address relating to this latency value)
 					remote_ip_rx = flit_temp.id;
 					element_index = flit_temp.id;
@@ -183,12 +191,6 @@ void packet_parser_multi_fanout (
 		else
 		{
 			counter = 0;
-		}
-		if (!out_stream.full()) { //send packets back towards master only when new packets still arrive
-			flit_temp.last = 1;
-			flit_temp.user = remote_ip_tx;
-			flit_temp.dest = flit_temp.id; //send it back to its sender
-			out_stream.write(flit_temp);
 		}
 		break;
 	case NODE: //output the node's tdest
