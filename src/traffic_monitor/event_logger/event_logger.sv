@@ -73,7 +73,7 @@ module event_logger # (
     logic trigger;
     assign trigger = (read_enable & (trigger_value == in_stream_TDATA)) ? 1 : 0;
         
-    assign read_enable = in_stream_TREADY & in_stream_TVALID;
+    assign read_enable = in_stream_TVALID;
     assign ts_write_enable = timestamp_TREADY;
     assign cnt_write_enable = count_TREADY;
     

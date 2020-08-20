@@ -81,7 +81,7 @@ module packet_snooper # (
    logic [63:0] packet_counter = 0; //count the number of passing packets
    logic [63:0] cycle_counter = 0; //duration of measurement
        
-   assign read_enable = in_stream_TREADY & in_stream_TVALID;
+   assign read_enable = in_stream_TVALID;
    assign fc_write_enable = flit_count_TREADY;
    assign pc_write_enable = packet_count_TREADY;
    assign cc_write_enable = cycle_count_TREADY;
