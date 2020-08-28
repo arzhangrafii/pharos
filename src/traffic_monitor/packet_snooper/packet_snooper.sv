@@ -29,7 +29,7 @@ module packet_snooper # (
    //event logger interface
    input wire [TDATA_WIDTH-1:0] in_stream_TDATA,
    input wire [TKEEP_WIDTH-1:0] in_stream_TKEEP,
-   output wire in_stream_TREADY,
+   input wire in_stream_TREADY,
    input wire in_stream_TVALID,
    input wire in_stream_TLAST,
    
@@ -81,7 +81,7 @@ module packet_snooper # (
    logic [63:0] packet_counter = 0; //count the number of passing packets
    logic [63:0] cycle_counter = 0; //duration of measurement
        
-   assign read_enable = in_stream_TVALID;
+   assign read_enable = in_stream_TVALID & in_stream_TREADY;
    assign fc_write_enable = flit_count_TREADY;
    assign pc_write_enable = packet_count_TREADY;
    assign cc_write_enable = cycle_count_TREADY;

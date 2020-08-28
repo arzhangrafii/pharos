@@ -24,6 +24,8 @@ ipx::package_project -root_dir ./${project_name}.srcs/sources_1 -vendor username
 
 #set port properties
 set_property interface_mode monitor [ipx::get_bus_interfaces in_stream -of_objects [ipx::current_core]]
+ipx::add_port_map TREADY [ipx::get_bus_interfaces in_stream -of_objects [ipx::current_core]]
+set_property physical_name in_stream_TREADY [ipx::get_port_maps TREADY -of_objects [ipx::get_bus_interfaces in_stream -of_objects [ipx::current_core]]]
 
 #create gui files and save core
 set_property core_revision 0 [ipx::current_core]
